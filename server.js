@@ -2,6 +2,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 
+import pkg from './package.json' with { type: 'json' };
+
 import productosRouter from './routes/productos.router.js';
 import usuariosRouter from './routes/usuarios.router.js';
 
@@ -37,4 +39,6 @@ function manejadorErrores( err, req, res, next){
   })
 }
 
-server.listen( PORT, ()=> console.log(`Server running on http://localhost:${PORT}`));
+server.listen( PORT, ()=>{ 
+  console.log(`Server(V ${pkg.version}) running on http://localhost:${PORT}`)
+});

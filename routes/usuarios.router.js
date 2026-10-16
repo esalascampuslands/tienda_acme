@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { validationResult } from 'express-validator';
+import { hashSync } from 'bcrypt';
 
 import pool from './../config/db.js';
 import UsuarioCrearDTO from '../dto/usuario.crear.dto.js';
@@ -27,7 +28,10 @@ usuariosRouter.get('/:id', autorizarUsuario, async ( req, res, next )=>{
 
 usuariosRouter.post('/', usuarioCrearValidaciones, manejadorErroresValidacion, async ( req, res, next )=>{
   try{
-    const usuario = new UsuarioCrearDTO(req.body);
+    const usuario = new UsuarioCrearDTO({
+      ...req.body,
+      contrasena: hashSync(req.body.contrasena, 10)
+    });
     const [ result ] = await pool.execute(
       'INSERT INTO usuarios(DPI, nombre, email, telefono, contrasena) VALUES ( ?, ?, ?, ?, ?)',
       [ usuario.identificacion, usuario.nombre, usuario.email, usuario.telefono, usuario.contrasena ]

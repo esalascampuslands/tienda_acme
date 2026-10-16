@@ -17,6 +17,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "express": "^5.3.0",
     "express-validator": "^7.3.2",
