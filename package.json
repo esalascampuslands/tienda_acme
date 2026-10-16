@@ -1,0 +1,29 @@
+{
+  "name": "tienda_acme",
+  "version": "1.0.0",
+  "description": "Ejemplo de implementación de Bases de datos Mysql con NodeJS, ExpressJS y MySQL2",
+  "keywords": [
+    "NodeJS",
+    "ExpressJS",
+    "MySQL2",
+    "API"
+  ],
+  "license": "ISC",
+  "author": "esalascampuslands",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon tienda_acme --quiet",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.3.0",
+    "express-validator": "^7.3.2",
+    "mysql2": "^3.24.5"
+  },
+  "devDependencies": {
+    "dotenv": "^18.0.7",
+    "nodemon": "^3.1.14"
+  }
+}

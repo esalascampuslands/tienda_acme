@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD de Productos</title>
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger-color: #dc2626;
+      --danger-hover: #b91c1c;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-color: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      gap: 2rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border-color);
+    }
+
+    h1,
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group.checkbox-group {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-container {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: #64748b;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #475569;
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background-color: #f1f5f9;
+    }
+
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-active {
+      background-color: #dcfce7;
+      color: #15803d;
+    }
+
+    .badge-inactive {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Gestión de Productos</h1>
+    <div class="card">
+      <h2 id="form-title">Agregar Producto</h2>
+      <form id="product-form">
+        <input type="hidden" id="edit-index" value="-1">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="codigo">Código</label>
+            <input type="text" id="codigo" required>
+          </div>
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="precio">Precio</label>
+            <input type="number" id="precio" step="0.01" min="0" required>
+          </div>
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="activo" checked>
+            <label for="activo">Activo</label>
+          </div>
+          <div class="form-group full-width">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" required></textarea>
+          </div>
+        </div>
+        <div class="btn-container">
+          <button type="submit" class="btn-primary" id="btn-save">Guardar</button>
+          <button type="button" class="btn-secondary" id="btn-cancel" style="display: none;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Lista de Productos</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="product-list"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
